@@ -10,26 +10,29 @@ def fahrenheit_to_celsius(fahrenheit):
 
 # Streamlit app
 def temperature_converter():
-    st.title("Temperature Converter")
+    st.title("🌡️ Temperature Converter")
+
+    st.write("Use this tool to convert temperatures between Celsius and Fahrenheit.")
 
     # Select conversion type
-    option = st.selectbox(
-        "Choose conversion type:",
+    option = st.radio(
+        "Select conversion type:",
         ("Celsius to Fahrenheit", "Fahrenheit to Celsius")
     )
 
-    # Based on user selection, take input and perform conversion
+    # Initialize temperature value and the slider ranges based on the selection
     if option == "Celsius to Fahrenheit":
-        celsius = st.number_input("Enter temperature in Celsius:")
-        if st.button("Convert"):
-            fahrenheit = celsius_to_fahrenheit(celsius)
-            st.success(f"{celsius}°C is equal to {fahrenheit}°F")
-    
-    elif option == "Fahrenheit to Celsius":
-        fahrenheit = st.number_input("Enter temperature in Fahrenheit:")
-        if st.button("Convert"):
-            celsius = fahrenheit_to_celsius(fahrenheit)
-            st.success(f"{fahrenheit}°F is equal to {celsius}°C")
+        celsius = st.slider("Select temperature in Celsius:", min_value=-100.0, max_value=100.0, value=0.0)
+        fahrenheit = celsius_to_fahrenheit(celsius)
+        st.metric(label="Converted Temperature", value=f"{fahrenheit:.2f}°F")
+    else:
+        fahrenheit = st.slider("Select temperature in Fahrenheit:", min_value=-100.0, max_value=212.0, value=32.0)
+        celsius = fahrenheit_to_celsius(fahrenheit)
+        st.metric(label="Converted Temperature", value=f"{celsius:.2f}°C")
+
+    # Provide an option to reset the slider
+    if st.button("Reset"):
+        st.experimental_rerun()
 
 if __name__ == "__main__":
     temperature_converter()
